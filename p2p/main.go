@@ -51,7 +51,7 @@ func main() {
 	// Make a host that listens on the given multiaddress
 	h, err := makeBasicHost(*listenF, *secio, *seed)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Host: Err = %v", err)
 	}
 
 	// Set a stream handler on host A. /p2p/1.0.0 is
@@ -59,7 +59,6 @@ func main() {
 	h.SetStreamHandler("/p2p/1.0.0", handleStream)
 
 	if *target != "" {
-
 		rw, err := startPeerAndConnect(ctx, h, *target)
 		if err != nil {
 			log.Println(err)

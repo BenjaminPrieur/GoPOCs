@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
+	mux "github.com/libp2p/go-libp2p-core/mux"
 	net "github.com/libp2p/go-libp2p-core/network"
 )
 
@@ -31,8 +32,11 @@ func readData(rw *bufio.ReadWriter) {
 
 	for {
 		str, err := rw.ReadString('\n')
+		if err == mux.ErrReset {
+			continue
+		}
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalf("Read data: Err = %v", err)
 		}
 
 		if str == "" {
@@ -51,7 +55,7 @@ func readData(rw *bufio.ReadWriter) {
 				bytes, err := json.MarshalIndent(Blockchain, "", "  ")
 				if err != nil {
 
-					log.Fatal(err)
+					log.Fatalf("marshal block: Err = %v", err)
 				}
 				// Green console color: 	\x1b[32m
 				// Reset console color: 	\x1b[0m
